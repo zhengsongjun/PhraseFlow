@@ -1,0 +1,81 @@
+import useToArticleIdGetChunk from '@/hook/serviceCustomHook/useToArticleIdGetChunk';
+import { useParams } from 'react-router-dom';
+import CardSet from './CardSet/CardSet';
+import SentencePractice from './SentencePractice/SentencePractice';
+import { useEffect, useState } from 'react';
+
+const Game = () => {
+  const { id } = useParams<{ id: string }>();
+  const { paragraphList } = useToArticleIdGetChunk(id as string);
+
+  const [currentParagraph, setCurrentParagraph] = useState(0);
+  const [currentChunks, setCurrentChunks] = useState(0);
+  const currentChunk =
+    paragraphList?.[currentParagraph]?.chunks?.[currentChunks];
+  const sentence = currentChunk?.text || '';
+  const translation = currentChunk?.definition || '';
+  const [processList, setProcessList] = useState<number[]>([]);
+
+  useEffect(() => {
+    const newProcessList = paragraphList.map((_, index) => {
+      return index === 0 ? 1 : 0;
+    });
+    setProcessList(newProcessList);
+  }, [paragraphList]);
+
+  useEffect(() => {
+    if (!paragraphList.length) return;
+
+    setProcessList((prev) => {
+      const updated = [...prev];
+      updated[currentParagraph] = currentChunks + 1;
+      return updated;
+    });
+  }, [currentChunks, currentParagraph]);
+
+  return (
+    <>
+      <CardSet
+        data={paragraphList.map((item, index) => {
+          return {
+            ...item,
+            total: paragraphList[index]?.chunks?.length || 0,
+            process: processList[index],
+          };
+        })}
+        current={currentParagraph}
+        onCardItemClick={(index) => {
+          setCurrentParagraph(index);
+          setCurrentChunks(0);
+        }}
+      />
+      <SentencePractice
+        onPerv={() => {
+          setCurrentChunks(currentChunks - 1);
+        }}
+        speechRate={2}
+        phonetic={currentChunk?.phonetic || ''}
+        sentence={sentence}
+        translation={translation}
+        onNext={() => {
+          if (
+            currentChunks ===
+            (paragraphList?.[currentParagraph]?.chunks?.length || 0) - 1
+          ) {
+            if (currentParagraph === paragraphList.length - 1) {
+              alert('完结撒花');
+            } else {
+              setCurrentParagraph(currentParagraph + 1);
+              setCurrentChunks(0);
+            }
+          } else {
+            setCurrentChunks(currentChunks + 1);
+          }
+        }}
+        disabeldPerv={currentChunks === 0}
+      />
+    </>
+  );
+};
+
+export default Game;

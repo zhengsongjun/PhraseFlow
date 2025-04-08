@@ -1,0 +1,30 @@
+{{!-- templates/function.hbs --}}
+
+{{#if operation.comments}}
+/**
+{{#each operation.comments}}
+ * {{this}}
+{{/each}}
+ */
+{{/if}}
+export const {{operation.name}} = (
+  {{#each operation.formattedParameters}}
+  {{this}}{{#unless @last}},{{/unless}}
+  {{/each}}
+) => {
+  return request<{{operation.responseType}}>({
+    url: `{{operation.path}}`,
+    method: '{{operation.method}}',
+    {{#if operation.formData}}
+    data,
+    {{/if}}
+    {{#if operation.body}}
+    data,
+    {{/if}}
+    {{#if operation.queryParamProperties.length}}
+    params,
+    {{/if}}
+    // 这里去掉了 '...axiosConfig'
+    // 你也可以在这里追加你自己的字段
+  });
+};

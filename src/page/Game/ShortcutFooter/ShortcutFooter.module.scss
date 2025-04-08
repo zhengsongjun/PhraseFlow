@@ -1,0 +1,62 @@
+.footer {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  background: rgba(20, 20, 30, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 10px 16px;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.15);
+  gap: 20px;
+}
+
+.shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+}
+
+.shortcut {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #a8c7fa;
+  text-shadow: 0 0 4px rgba(0, 255, 255, 0.3);
+}
+
+.key {
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-family: monospace;
+  font-size: 13px;
+  color: #00f7ff;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.25) inset;
+  text-shadow: 0 0 4px rgba(0, 255, 255, 0.6);
+}
+
+.label {
+  color: #b6d5ff;
+}
+
+.nextButton {
+  cursor: pointer;
+  color: #00e0ff;
+  padding: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    transform: translateX(4px);
+    color: #00ffff;
+    filter: drop-shadow(0 0 6px #00f0ff);
+  }
+}

@@ -1,0 +1,10 @@
+{{!-- templates/client.hbs --}}
+
+{{> definition this}}
+{{> clientImports this}}
+
+{{!--
+  留空或仅写注释都可以。
+  这样就不会自动插入 axios 的 import/逻辑。
+--}}
+/** custom client template, no default axios code */

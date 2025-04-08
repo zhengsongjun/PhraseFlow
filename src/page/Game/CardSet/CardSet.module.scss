@@ -1,0 +1,145 @@
+.cardSet {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 99;
+}
+
+.card {
+  width: 260px;
+  padding: 16px;
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 102, 255, 0.15),
+    rgba(0, 255, 204, 0.1)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 12px rgba(0, 153, 255, 0.25);
+  color: #fff;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+
+  &:hover {
+    box-shadow: 0 0 18px rgba(0, 255, 204, 0.5);
+    transform: translateY(-2px);
+  }
+}
+
+.current {
+  border: 1px solid #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.6);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .status {
+    font-size: 0.75rem;
+    color: #00ffff;
+  }
+}
+
+.cardBody {
+  .text,
+  .translation {
+    margin: 6px 0;
+    font-size: 0.88rem;
+    color: #d6f0ff;
+  }
+
+  .ellipsisTwoLines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .progressBarWrapper {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    height: 6px;
+    margin: 10px 0;
+    overflow: hidden;
+
+    .progressBar {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+  }
+
+  .taskCount {
+    font-size: 0.75rem;
+    color: #c8e4ff;
+    text-align: right;
+  }
+}
+
+.toggleButton {
+  background: rgba(0, 255, 204, 0.2);
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(0, 255, 204, 0.4);
+  }
+}
+
+.cardSetCollapsed {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 99;
+  gap: 12px;
+}
+
+.verticalProgressWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.verticalProgressTrack {
+  width: 12px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.verticalProgressBar {
+  width: 100%;
+  background: linear-gradient(to top, #00c6ff, #0072ff);
+  transition: height 0.3s ease;
+}
+
+.verticalProgressText {
+  font-size: 0.75rem;
+  color: #c8e4ff;
+  text-align: center;
+}
