@@ -1,0 +1,33 @@
+// components/TimeTracker/TimeTracker.module.scss
+
+.timeTracker {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 132, 255, 0.15),
+    rgba(0, 242, 255, 0.1)
+  );
+  color: #00e5ff;
+  border: 1px solid rgba(0, 238, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.icon {
+  font-size: 18px;
+}
+
+.time {
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  color: #fff;
+}

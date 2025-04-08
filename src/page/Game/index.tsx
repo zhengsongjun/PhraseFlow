@@ -3,11 +3,13 @@ import { useParams } from 'react-router-dom';
 import CardSet from './CardSet/CardSet';
 import SentencePractice from './SentencePractice/SentencePractice';
 import { useEffect, useState } from 'react';
+import { usePracticeTracker } from '@/hook/serviceCustomHook/usePracticeTracker';
+import TimeTracker from './TimeTracker/TimeTracker';
 
 const Game = () => {
   const { id } = useParams<{ id: string }>();
+  const { activeTime } = usePracticeTracker({ page: 'particle' });
   const { paragraphList } = useToArticleIdGetChunk(id as string);
-
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const [currentChunks, setCurrentChunks] = useState(0);
   const currentChunk =
@@ -35,6 +37,7 @@ const Game = () => {
 
   return (
     <>
+      <TimeTracker style={{ margin: 20 }} activeTime={activeTime} />
       <CardSet
         data={paragraphList.map((item, index) => {
           return {
