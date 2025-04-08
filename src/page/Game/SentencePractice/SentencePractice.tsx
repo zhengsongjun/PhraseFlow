@@ -37,7 +37,6 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   const [wrongIndices, setWrongIndices] = useState<number[]>([]);
   const [touchedIndices, setTouchedIndices] = useState<number[]>([]);
   const inputAudioRef = useRef<HTMLAudioElement | null>(null);
-
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const playAudioMultipleTimes = (text: string, times: number) => {
     let count = 0;
@@ -57,6 +56,21 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
     speechSynthesis.cancel();
     play();
   };
+
+  const resetStates = () => {
+    setInputs(tokens.map(() => '')); // 清空输入框
+    setIsCorrect(null); // 重置验证结果
+    setWrongIndices([]); // 清空错误索引
+    setTouchedIndices([]); // 清空已触碰索引
+
+    const firstWord = wordIndices[0];
+    if (firstWord !== undefined) {
+      inputRefs.current[firstWord]?.focus(); // 聚焦到第一个单词
+    }
+
+    playAudioMultipleTimes(sentence, 3); // 重播语音
+  };
+
   const handleInputChange = (index: number, value: string) => {
     const updated = [...inputs];
     updated[index] = value;
@@ -106,12 +120,9 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   };
 
   const handleSubmit = () => {
-    const inputWords = inputs
-      .map((i) => i.trim().toLowerCase())
-      .filter((_, idx) => isWord(tokens[idx]));
-    const targetWords = tokens.filter(isWord).map((w) => w.toLowerCase());
-
     const wrong: number[] = [];
+
+    // 检查每个单词是否正确
     tokens.forEach((token, idx) => {
       if (isWord(token)) {
         const inputVal = inputs[idx].trim().toLowerCase();
@@ -120,9 +131,11 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
       }
     });
 
+    // 如果没有错误，设置为正确，并允许继续
     setIsCorrect(wrong.length === 0);
     setWrongIndices(wrong);
 
+    // 如果有错误，聚焦到第一个错误位置
     if (wrong.length > 0) {
       inputRefs.current[wrong[0]]?.focus();
     }
@@ -132,66 +145,57 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
     e.preventDefault(); // 阻止默认聚焦行为
   };
 
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
-  ) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const key = e.key;
 
+    // 处理退格键的逻辑
     if (key === 'Backspace') {
-      const currentValue = inputs[index];
-      const isWrong = wrongIndices.includes(index);
+      const currentValue = inputs[focusedIndex ?? -1];
+      const isWrong = wrongIndices.includes(focusedIndex ?? -1);
 
       if (isWrong) {
         e.preventDefault();
         const updated = [...inputs];
-        updated[index] = '';
+        updated[focusedIndex ?? 0] = '';
         setInputs(updated);
-        setWrongIndices((prev) => prev.filter((i) => i !== index));
+        setWrongIndices((prev) =>
+          prev.filter((i) => i !== (focusedIndex ?? -1))
+        );
         return;
       }
 
-      if (currentValue === '' && index > 0) {
+      if (currentValue === '' && focusedIndex && focusedIndex > 0) {
         e.preventDefault();
-        const prevWordIndex = [...wordIndices].reverse().find((i) => i < index);
+        const prevWordIndex = [...wordIndices]
+          .reverse()
+          .find((i) => i < focusedIndex);
         if (prevWordIndex !== undefined) {
           inputRefs.current[prevWordIndex]?.focus();
         }
       }
     }
 
+    // 处理回车键的逻辑
     if (key === 'Enter') {
-      handleSubmit();
+      handleSubmit(); // 如果输入不正确，进行验证
+      e.stopPropagation();
     }
 
+    // 处理空格和Tab键，跳转到下一个输入框
     if (key === ' ' || key === 'Tab') {
-      const currentValue = inputs[index]?.trim();
+      const currentValue = inputs[focusedIndex ?? -1]?.trim();
       if (currentValue) {
         e.preventDefault();
-        const nextWordIndex = wordIndices.find((i) => i > index);
+        const nextWordIndex = wordIndices.find((i) => i > (focusedIndex ?? -1));
         if (nextWordIndex !== undefined) {
           inputRefs.current[nextWordIndex]?.focus();
         }
       } else {
-        e.preventDefault(); // 空值不跳转
+        e.preventDefault(); // 空值时不跳转
       }
     }
 
-    if (isPrintableCharacter(key) && wrongIndices.includes(index)) {
-      e.preventDefault();
-      const updated = [...inputs];
-      updated[index] = '';
-      setInputs(updated);
-
-      setTimeout(() => {
-        const nextUpdate = [...updated];
-        nextUpdate[index] = key;
-        setInputs(nextUpdate);
-        setWrongIndices((prev) => prev.filter((i) => i !== index));
-      }, 10);
-    }
-
-    // ✅ 播放输入音效（打字/空格/Tab/退格键），排除组合键
+    // 播放输入音效（打字/空格/Tab/退格键），排除组合键
     const shouldPlaySound =
       (isPrintableCharacter(key) ||
         key === 'Backspace' ||
@@ -235,7 +239,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
           keys: ['Enter'],
           label: '下一题',
           onClick: () => {
-            onNext();
+            // onNext();
           }, // 你需要实现这个
         },
         {
@@ -263,7 +267,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
         {
           keys: ['Enter'],
           label: '提交',
-          onClick: () => handleSubmit(), // 你需要添加该函数逻辑
+          // onClick: () => handleSubmit(), // 你需要添加该函数逻辑
         },
         {
           keys: ['Ctrl', ':'],
@@ -301,6 +305,10 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [sentence]);
+
+  useEffect(() => {
+    console.log(isCorrect, '变化');
+  }, [isCorrect]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -362,6 +370,20 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   useEffect(() => {
     inputAudioRef.current = new Audio(inputMp3);
   }, []);
+
+  useEffect(() => {
+    // 全局监听键盘事件
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && isCorrect) {
+        onNext();
+      }
+    };
+
+    document.addEventListener('keydown', handleGlobalKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleGlobalKeyDown);
+    };
+  }, [isCorrect]);
 
   return (
     <div className={styles.container}>
