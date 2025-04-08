@@ -16,7 +16,9 @@ import type {
   CreateArticleDto,
   CreateChunkDto,
   CreateParagraphDto,
+  CreateUserDto,
   CreateWordDto,
+  LoginUserDto,
   PaginationResult,
   Paragraph,
   UpdateChunkDto,
@@ -231,7 +233,31 @@ const wordControllerFindOne = <TData = AxiosResponse<void>>(
     );
   }
 
-return {articleControllerCreate,articleControllerFindAll,articleControllerFindOne,paragraphControllerCreate,paragraphControllerFindAll,paragraphControllerUpdate,paragraphControllerFindOne,paragraphControllerToArticleIdGetParagraphList,chunkControllerCreate,chunkControllerFindAll,chunkControllerToParagraphIdFindChunks,chunkControllerUpdate,chunkControllerFindOne,chunkControllerBatch,wordControllerCreate,wordControllerFindAll,wordControllerUpdate,wordControllerFindOne}};
+/**
+ * @summary 注册
+ */
+const userControllerCreateUser = <TData = AxiosResponse<void>>(
+    createUserDto: CreateUserDto, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/user/register`,
+      createUserDto,options
+    );
+  }
+
+/**
+ * @summary 登录
+ */
+const userControllerLogin = <TData = AxiosResponse<LoginUserDto>>(
+    createUserDto: CreateUserDto, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/user/login`,
+      createUserDto,options
+    );
+  }
+
+return {articleControllerCreate,articleControllerFindAll,articleControllerFindOne,paragraphControllerCreate,paragraphControllerFindAll,paragraphControllerUpdate,paragraphControllerFindOne,paragraphControllerToArticleIdGetParagraphList,chunkControllerCreate,chunkControllerFindAll,chunkControllerToParagraphIdFindChunks,chunkControllerUpdate,chunkControllerFindOne,chunkControllerBatch,wordControllerCreate,wordControllerFindAll,wordControllerUpdate,wordControllerFindOne,userControllerCreateUser,userControllerLogin}};
 export type ArticleControllerCreateResult = AxiosResponse<void>
 export type ArticleControllerFindAllResult = AxiosResponse<PaginationResult>
 export type ArticleControllerFindOneResult = AxiosResponse<void>
@@ -250,3 +276,5 @@ export type WordControllerCreateResult = AxiosResponse<void>
 export type WordControllerFindAllResult = AxiosResponse<void>
 export type WordControllerUpdateResult = AxiosResponse<void>
 export type WordControllerFindOneResult = AxiosResponse<void>
+export type UserControllerCreateUserResult = AxiosResponse<void>
+export type UserControllerLoginResult = AxiosResponse<LoginUserDto>

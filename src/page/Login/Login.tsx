@@ -2,14 +2,20 @@ import React, { useState } from 'react';
 import { Tabs, Form, Input, Button, message, Card } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styles from './Login.module.scss';
+import { useNavigate } from 'react-router-dom';
+import { login } from '@/services/user';
 
 const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const onLogin = async (values: any) => {
     setLoading(true);
     try {
-      console.log('登录数据:', values);
+      const result = await login(values);
+      if (result.token) {
+        localStorage.setItem('token', result.token);
+        navigate('/article');
+      }
       message.success('登录成功');
     } catch (e) {
       message.error('登录失败');

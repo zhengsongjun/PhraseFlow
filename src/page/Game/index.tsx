@@ -53,7 +53,7 @@ const Game = () => {
         onPerv={() => {
           setCurrentChunks(currentChunks - 1);
         }}
-        speechRate={2}
+        speechRate={0.8}
         phonetic={currentChunk?.phonetic || ''}
         sentence={sentence}
         translation={translation}

@@ -1,12 +1,6 @@
 import React from 'react';
 import { ConfigProvider, Layout, theme, App as AntdApp } from 'antd'; // ✅ 加入 App
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useMatch,
-} from 'react-router-dom';
+import { Routes, Route, Link, useMatch } from 'react-router-dom';
 import ProLayout from '@ant-design/pro-layout';
 import { renderIcon } from '@/utils/renderIcon';
 import { RenderRoutes } from './renderRoutes';
@@ -79,11 +73,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
 };
 
 const LayoutWithRouter: React.FC<BaseLayoutProps> = (props) => {
-  return (
-    <Router>
-      <BaseLayout {...props} />
-    </Router>
-  );
+  return <BaseLayout {...props} />;
 };
 
 export default LayoutWithRouter;

@@ -3,21 +3,46 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   background-size: cover;
+  font-family: 'Segoe UI', 'PingFang SC', 'Roboto', sans-serif;
 }
 
 .card {
-  width: 360px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  border-radius: 12px;
-  background: #fff;
+  width: 400px;
+  padding: 32px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1); // 毛玻璃底色
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(18px); // 毛玻璃核心
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transition: all 0.3s ease-in-out;
 }
 
 .title {
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   margin-bottom: 24px;
-  color: #333;
+  color: #ffffffcc;
+}
+
+.ant-input,
+.ant-input-password {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: transparent;
+  color: #fff;
+  backdrop-filter: blur(8px);
+  &::placeholder {
+    color: #ffffff88;
+  }
+}
+
+.ant-tabs-tab {
+  color: #ccc !important;
+}
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #fff !important;
 }
