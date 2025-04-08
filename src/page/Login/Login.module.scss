@@ -1,0 +1,23 @@
+.wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #0f2027, #203a43, #2c5364);
+  background-size: cover;
+}
+
+.card {
+  width: 360px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #333;
+}

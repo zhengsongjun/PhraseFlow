@@ -51,7 +51,6 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
       }}
     >
       <AntdApp>
-        {' '}
         {/* ✅ 用 App 组件包裹整个应用，修复 message 警告 */}
         <ProLayout
           {...layoutConfig}
