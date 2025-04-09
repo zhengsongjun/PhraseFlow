@@ -1,0 +1,49 @@
+// RecentStudyCard.module.scss
+.recentStudy {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 229, 255, 0.12);
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+  animation: fadeInUp 0.7s ease;
+
+  h3 {
+    margin-bottom: 1rem;
+    color: #ffffff;
+    font-size: 1.25rem;
+  }
+}
+
+.recentItem {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+
+  img {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  p {
+    margin: 0;
+    color: #ffffff;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+}
+
+.progressBar {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  height: 6px;
+
+  div {
+    background: #00e5ff;
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+}

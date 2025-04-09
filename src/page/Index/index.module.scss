@@ -1,0 +1,50 @@
+/* index.module.scss - Flexbox 配合图示布局 */
+
+.pageLayout {
+  display: flex;
+  gap: 2rem;
+  height: 100%;
+  padding: 2rem;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  font-family: 'Orbitron', sans-serif;
+}
+
+.mainColumn {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.sideColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.userInfo {
+  flex: none;
+}
+
+.rowPair {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+
+  > div {
+    flex: 1;
+    min-width: 280px;
+  }
+}
+
+.learning,
+.achievement,
+.heatmap,
+.review {
+  flex: none;
+}
+
+.future {
+  flex: none;
+}

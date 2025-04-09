@@ -1,0 +1,38 @@
+.userInfoCard {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 229, 255, 0.2);
+  backdrop-filter: blur(8px);
+  animation: fadeInUp 0.5s ease;
+  gap: 1rem;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.infoContent {
+  h2 {
+    margin: 0;
+    color: #ffffff;
+  }
+
+  p {
+    margin: 0.2rem 0 0.8rem;
+    color: #80deea;
+  }
+
+  ul {
+    padding-left: 1rem;
+    color: #b2ebf2;
+    li {
+      margin-bottom: 0.3rem;
+    }
+  }
+}

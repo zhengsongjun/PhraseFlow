@@ -1,0 +1,41 @@
+// ReviewSummaryCard.module.scss
+.reviewCard {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 229, 255, 0.15);
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 0.6s ease;
+
+  h3 {
+    color: #ffffff;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+    margin-bottom: 1rem;
+
+    li {
+      margin-bottom: 0.5rem;
+      color: #b2ebf2;
+      font-size: 0.95rem;
+    }
+  }
+
+  button {
+    background: transparent;
+    border: 1px solid #00e5ff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    color: #00e5ff;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.3s;
+
+    &:hover {
+      background: rgba(0, 229, 255, 0.08);
+    }
+  }
+}

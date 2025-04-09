@@ -1,0 +1,56 @@
+// LearningTrendCard.module.scss
+.chartCard {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 229, 255, 0.2);
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+  animation: fadeInUp 0.6s ease;
+}
+
+.chartCardWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+
+  h3 {
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin: 0;
+  }
+}
+
+.tabBtns {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    border: none;
+    padding: 0.4rem 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #b2ebf2;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.3s;
+
+    &:hover {
+      background: rgba(0, 229, 255, 0.1);
+    }
+  }
+
+  .active {
+    background: linear-gradient(135deg, #00e5ff, #8e24aa);
+    color: #fff;
+  }
+}
+
+.chartPlaceholder {
+  background: rgba(0, 229, 255, 0.05);
+  padding: 1rem;
+  border-radius: 12px;
+  color: #90caf9;
+  font-style: italic;
+}

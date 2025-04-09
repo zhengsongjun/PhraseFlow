@@ -2,6 +2,12 @@ import { MenuItem } from '../types/config';
 
 const menuData: MenuItem[] = [
   {
+    path: '/index',
+    name: '首页',
+    icon: 'UserOutlined',
+    element: 'Index',
+  },
+  {
     path: '/user',
     name: '用户',
     icon: 'UserOutlined',
