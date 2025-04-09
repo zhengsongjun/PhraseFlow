@@ -13,16 +13,20 @@ import type {
 
 import type {
   Chunk,
+  CreateActiveLogDto,
   CreateArticleDto,
   CreateChunkDto,
   CreateParagraphDto,
+  CreateSmartActicleDto,
   CreateUserDto,
   CreateWordDto,
   LoginUserDto,
   PaginationResult,
   Paragraph,
+  PracticeStasticControllerFindByOneArticleStatisticParams,
   UpdateChunkDto,
   UpdateParagraphDto,
+  UpdatePracticeStatistics,
   UpdateWordDto
 } from './model';
 
@@ -113,6 +117,30 @@ const paragraphControllerToArticleIdGetParagraphList = <TData = AxiosResponse<Pa
  ): Promise<TData> => {
     return axios.get(
       `/paragraphs/all/${articleId}`,options
+    );
+  }
+
+/**
+ * @summary 创建短文chunk
+ */
+const chunkControllerCreateSmartArticleChunk = <TData = AxiosResponse<void>>(
+    smartArticleId: string,
+    chunkControllerCreateSmartArticleChunkBody: string[], options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/chunks/smart-article/${smartArticleId}`,
+      chunkControllerCreateSmartArticleChunkBody,options
+    );
+  }
+
+/**
+ * @summary 通过短文ID获取chunk
+ */
+const chunkControllerToSmartArticleIdGetAllChunks = <TData = AxiosResponse<void>>(
+    smartArticleId: string, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/chunks/smart-article/${smartArticleId}`,options
     );
   }
 
@@ -257,7 +285,111 @@ const userControllerLogin = <TData = AxiosResponse<LoginUserDto>>(
     );
   }
 
-return {articleControllerCreate,articleControllerFindAll,articleControllerFindOne,paragraphControllerCreate,paragraphControllerFindAll,paragraphControllerUpdate,paragraphControllerFindOne,paragraphControllerToArticleIdGetParagraphList,chunkControllerCreate,chunkControllerFindAll,chunkControllerToParagraphIdFindChunks,chunkControllerUpdate,chunkControllerFindOne,chunkControllerBatch,wordControllerCreate,wordControllerFindAll,wordControllerUpdate,wordControllerFindOne,userControllerCreateUser,userControllerLogin}};
+/**
+ * @summary 活跃时间页面
+ */
+const activeLogControllerCreate = <TData = AxiosResponse<void>>(
+    createActiveLogDto: CreateActiveLogDto, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/active-log`,
+      createActiveLogDto,options
+    );
+  }
+
+/**
+ * @summary 获取今日学习总时长（秒）
+ */
+const activeLogControllerGetToday = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/active-log/day`,options
+    );
+  }
+
+/**
+ * @summary 获取本周每天学习时长（用于折线图）
+ */
+const activeLogControllerGetWeek = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/active-log/week`,options
+    );
+  }
+
+/**
+ * @summary 获取本月学习总时长
+ */
+const activeLogControllerGetMonth = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/active-log/month`,options
+    );
+  }
+
+/**
+ * @summary 获取本月每天学习时长（用于折线图）
+ */
+const activeLogControllerGetMonthMap = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/active-log/month-map`,options
+    );
+  }
+
+/**
+ * @summary 获取文章统计
+ */
+const practiceStasticControllerFindByOneArticleStatistic = <TData = AxiosResponse<void>>(
+    params: PracticeStasticControllerFindByOneArticleStatisticParams, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/statistic`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+/**
+ * @summary 跟新文章练习次数
+ */
+const practiceStasticControllerUpdateArticle = <TData = AxiosResponse<void>>(
+    updatePracticeStatistics: UpdatePracticeStatistics, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.put(
+      `/statistic`,
+      updatePracticeStatistics,options
+    );
+  }
+
+/**
+ * @summary 查询短文列表
+ */
+const smartArticleControllerFind = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/smart-article`,options
+    );
+  }
+
+/**
+ * @summary 创建短文
+ */
+const smartArticleControllerReate = <TData = AxiosResponse<void>>(
+    createSmartActicleDto: CreateSmartActicleDto, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/smart-article`,
+      createSmartActicleDto,options
+    );
+  }
+
+return {articleControllerCreate,articleControllerFindAll,articleControllerFindOne,paragraphControllerCreate,paragraphControllerFindAll,paragraphControllerUpdate,paragraphControllerFindOne,paragraphControllerToArticleIdGetParagraphList,chunkControllerCreateSmartArticleChunk,chunkControllerToSmartArticleIdGetAllChunks,chunkControllerCreate,chunkControllerFindAll,chunkControllerToParagraphIdFindChunks,chunkControllerUpdate,chunkControllerFindOne,chunkControllerBatch,wordControllerCreate,wordControllerFindAll,wordControllerUpdate,wordControllerFindOne,userControllerCreateUser,userControllerLogin,activeLogControllerCreate,activeLogControllerGetToday,activeLogControllerGetWeek,activeLogControllerGetMonth,activeLogControllerGetMonthMap,practiceStasticControllerFindByOneArticleStatistic,practiceStasticControllerUpdateArticle,smartArticleControllerFind,smartArticleControllerReate}};
 export type ArticleControllerCreateResult = AxiosResponse<void>
 export type ArticleControllerFindAllResult = AxiosResponse<PaginationResult>
 export type ArticleControllerFindOneResult = AxiosResponse<void>
@@ -266,6 +398,8 @@ export type ParagraphControllerFindAllResult = AxiosResponse<void>
 export type ParagraphControllerUpdateResult = AxiosResponse<void>
 export type ParagraphControllerFindOneResult = AxiosResponse<void>
 export type ParagraphControllerToArticleIdGetParagraphListResult = AxiosResponse<Paragraph[]>
+export type ChunkControllerCreateSmartArticleChunkResult = AxiosResponse<void>
+export type ChunkControllerToSmartArticleIdGetAllChunksResult = AxiosResponse<void>
 export type ChunkControllerCreateResult = AxiosResponse<void>
 export type ChunkControllerFindAllResult = AxiosResponse<void>
 export type ChunkControllerToParagraphIdFindChunksResult = AxiosResponse<Chunk[]>
@@ -278,3 +412,12 @@ export type WordControllerUpdateResult = AxiosResponse<void>
 export type WordControllerFindOneResult = AxiosResponse<void>
 export type UserControllerCreateUserResult = AxiosResponse<void>
 export type UserControllerLoginResult = AxiosResponse<LoginUserDto>
+export type ActiveLogControllerCreateResult = AxiosResponse<void>
+export type ActiveLogControllerGetTodayResult = AxiosResponse<void>
+export type ActiveLogControllerGetWeekResult = AxiosResponse<void>
+export type ActiveLogControllerGetMonthResult = AxiosResponse<void>
+export type ActiveLogControllerGetMonthMapResult = AxiosResponse<void>
+export type PracticeStasticControllerFindByOneArticleStatisticResult = AxiosResponse<void>
+export type PracticeStasticControllerUpdateArticleResult = AxiosResponse<void>
+export type SmartArticleControllerFindResult = AxiosResponse<void>
+export type SmartArticleControllerReateResult = AxiosResponse<void>

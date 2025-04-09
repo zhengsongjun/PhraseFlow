@@ -6,7 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface Chunk {
+export interface SmartArticle {
   /** id */
   id: string;
   /** 创建时间 */
@@ -17,14 +17,8 @@ export interface Chunk {
   createdBy: string;
   /** 更新人 */
   updatedBy: string;
-  /** 短文id */
-  smartArticleId: string;
-  /** 排序 */
-  sort: number;
-  /** 正文 */
-  text: string;
-  /** 音标 */
-  phonetic: string;
-  /** 翻译 */
-  definition: string;
+  /** 标题 */
+  title: string;
+  /** 简介 */
+  descript: string;
 }

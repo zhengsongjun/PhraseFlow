@@ -10,3 +10,13 @@ export const toParaGraphIdGetChunkList = async (
   });
   return result;
 };
+
+export const toSmartArticleIdGetChunkList = async (
+  smartArticleId: string
+): Promise<Chunk[]> => {
+  const result = await request({
+    url: `/chunks/smart-article/${smartArticleId}`,
+    method: 'get',
+  });
+  return result;
+};

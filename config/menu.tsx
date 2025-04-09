@@ -8,6 +8,26 @@ const menuData: MenuItem[] = [
     element: 'Index',
   },
   {
+    path: '/smart-article',
+    name: '短文',
+    icon: 'UserOutlined',
+    element: 'SmartArticle',
+  },
+  {
+    path: '/smart-article-game/:id',
+    name: '短文练习',
+    icon: 'UserOutlined',
+    element: 'SmartArticleGame',
+    disabledShowMenu: true,
+  },
+  {
+    path: '/game/:id',
+    icon: 'xxx',
+    element: 'Game',
+    name: '游戏',
+    disabledShowMenu: true,
+  },
+  {
     path: '/user',
     name: '用户',
     icon: 'UserOutlined',
@@ -38,13 +58,6 @@ const menuData: MenuItem[] = [
     name: '文章',
     icon: 'NotificationOutlined',
     element: 'Article',
-  },
-  {
-    path: '/game/:id',
-    icon: 'xxx',
-    element: 'Game',
-    name: '游戏',
-    disabledShowMenu: true,
   },
 ];
 

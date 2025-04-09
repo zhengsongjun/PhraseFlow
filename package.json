@@ -19,6 +19,7 @@
     "axios": "^1.8.4",
     "chart.js": "^4.4.8",
     "dayjs": "^1.11.13",
+    "fireworks-js": "^2.10.8",
     "lucide-react": "^0.487.0",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
