@@ -1,5 +1,5 @@
 // index.tsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
 
 import {
@@ -17,6 +17,11 @@ import WrongQuestionCard from './WrongQuestionCard/WrongQuestionCard';
 import RecommendCourseCard from './RecommendCourseCard/RecommendCourseCard';
 import HeatmapCard from './HeatmapCard/HeatmapCard';
 import RecentStudyCard from './RecentStudyCard/RecentStudyCard';
+import {
+  getCurrentDayActiveTime,
+  getCurrentMonthActiveTime,
+  getCurrentWeekActiveTimeMap,
+} from '@/services/count';
 
 ChartJS.register(
   LineElement,
@@ -28,7 +33,6 @@ ChartJS.register(
 
 const Dashboard = () => {
   const [mode, setMode] = useState<'day' | 'week' | 'month'>('day');
-
   const today = new Date();
   const heatmapData: Record<string, number> = {};
   for (let i = 0; i < 365; i++) {
@@ -38,6 +42,12 @@ const Dashboard = () => {
       Math.random() * 5
     );
   }
+
+  useEffect(() => {
+    getCurrentDayActiveTime();
+    getCurrentMonthActiveTime();
+    getCurrentWeekActiveTimeMap();
+  }, []);
 
   const hourlyData = Array.from({ length: 24 }, (_, i) => i);
   const weekData = ['日', '一', '二', '三', '四', '五', '六'];
