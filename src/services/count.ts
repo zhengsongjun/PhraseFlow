@@ -1,6 +1,6 @@
 import { request } from '@/utils/request';
 
-export const getCurrentDayActiveTime = async () => {
+export const getCurrentDayActiveTime = async (): Promise<{ data: number }> => {
   const result = await request({
     method: 'get',
     url: `/active-log/day`,
@@ -8,7 +8,9 @@ export const getCurrentDayActiveTime = async () => {
   return result;
 };
 
-export const getCurrentMonthActiveTime = async () => {
+export const getCurrentMonthActiveTime = async (): Promise<{
+  data: Record<string, number>;
+}> => {
   const result = await request({
     method: 'get',
     url: `/active-log/month-map`,
@@ -16,7 +18,9 @@ export const getCurrentMonthActiveTime = async () => {
   return result;
 };
 
-export const getCurrentWeekActiveTimeMap = async () => {
+export const getCurrentWeekActiveTimeMap = async (): Promise<{
+  data: Record<string, number>;
+}> => {
   const result = await request({
     method: 'get',
     url: `/active-log/week`,

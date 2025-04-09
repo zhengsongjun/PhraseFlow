@@ -1,8 +1,16 @@
 import React from 'react';
 import styles from './UserInfoCard.module.scss';
 import image from '@/assets/R.jpeg'; // 替换为你的头像资源路径
+import { IBaseComProps } from '@/utils/base';
 
-const UserInfoCard = () => {
+export interface IUserInfoCard extends IBaseComProps {
+  count: string;
+  weekCount: string;
+  monthCount: string;
+}
+
+const UserInfoCard: React.FC<IUserInfoCard> = (props) => {
+  const { count, weekCount, monthCount } = props;
   return (
     <div className={styles.userInfoCard}>
       <img src={image} alt='头像' className={styles.avatar} />
@@ -12,7 +20,10 @@ const UserInfoCard = () => {
           你已经连续学习 <strong>5 天</strong>，击败了 87% 的学习者 ✨
         </p>
         <ul>
-          <li>📈 学习时长：12 小时</li>
+          <li>
+            📈 学习时长：{count} 小时 本周学习时长：{weekCount} 本月学习时长:
+            {monthCount}
+          </li>
           <li>🔥 连续打卡：5 天</li>
           <li>🏅 完成课程：6 节</li>
         </ul>
