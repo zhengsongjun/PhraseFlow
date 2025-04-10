@@ -18,10 +18,6 @@ import RecommendCourseCard from './RecommendCourseCard/RecommendCourseCard';
 import HeatmapCard from './HeatmapCard/HeatmapCard';
 import RecentStudyCard from './RecentStudyCard/RecentStudyCard';
 import { useCountActive } from '@/hook/serviceCustomHook/useCountActive';
-import {
-  findPracticeStatistic,
-  updatePracticeStatistic,
-} from '@/services/practiceStatistic';
 
 ChartJS.register(
   LineElement,
@@ -90,10 +86,10 @@ const Dashboard = () => {
     },
   };
 
-  useEffect(async () => {
-    await updatePracticeStatistic('a1aacaa9-bf0d-41c9-ba14-acb58731d19a');
-    await findPracticeStatistic('a1aacaa9-bf0d-41c9-ba14-acb58731d19a');
-  }, []);
+  // useEffect(async () => {
+  //   await updatePracticeStatistic('a1aacaa9-bf0d-41c9-ba14-acb58731d19a');
+  //   await findPracticeStatistic('a1aacaa9-bf0d-41c9-ba14-acb58731d19a');
+  // }, []);
 
   return (
     <div className={styles.pageLayout}>

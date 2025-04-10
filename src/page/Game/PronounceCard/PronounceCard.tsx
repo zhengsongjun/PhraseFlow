@@ -12,11 +12,12 @@ const PronounceCard: React.FC<PronounceCardProps> = ({
   word,
   phonetic,
   visible,
+  style,
 }) => {
   if (!visible) return null;
 
   return (
-    <div className={styles.card}>
+    <div style={style} className={styles.card}>
       <div className={styles.word}>{word}</div>
       <div className={styles.phonetic}>/{phonetic}/</div>
     </div>

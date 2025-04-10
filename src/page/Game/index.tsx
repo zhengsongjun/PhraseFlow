@@ -1,10 +1,12 @@
 import useToArticleIdGetChunk from '@/hook/serviceCustomHook/useToArticleIdGetChunk';
 import { useParams } from 'react-router-dom';
 import CardSet from './CardSet/CardSet';
-import SentencePractice from './SentencePractice/SentencePractice';
+import SentencePractice from '../../components/SentencePractice/SentencePractice';
 import { useEffect, useState } from 'react';
 import { usePracticeTracker } from '@/hook/serviceCustomHook/usePracticeTracker';
 import TimeTracker from './TimeTracker/TimeTracker';
+import FireworksContainer from '@/components/FireworksContainer/FireworksContainer';
+import CongratsModal from '@/components/CongratsModal/CongratsModal';
 
 const Game = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,6 +14,7 @@ const Game = () => {
   const { paragraphList } = useToArticleIdGetChunk(id as string);
   const [currentParagraph, setCurrentParagraph] = useState(0);
   const [currentChunks, setCurrentChunks] = useState(0);
+  const [showFireworks, setShowFireworks] = useState(false);
   const currentChunk =
     paragraphList?.[currentParagraph]?.chunks?.[currentChunks];
   const sentence = currentChunk?.text || '';
@@ -60,13 +63,28 @@ const Game = () => {
         phonetic={currentChunk?.phonetic || ''}
         sentence={sentence}
         translation={translation}
+        onPassValidate={() => {
+          if (
+            currentChunks ===
+            (paragraphList?.[currentParagraph]?.chunks?.length || 0) - 1
+          ) {
+            if (currentParagraph === paragraphList.length - 1) {
+              setShowFireworks(true);
+            } else {
+              setCurrentParagraph(currentParagraph + 1);
+              setCurrentChunks(0);
+            }
+          } else {
+            setCurrentChunks(currentChunks + 1);
+          }
+        }}
         onNext={() => {
           if (
             currentChunks ===
             (paragraphList?.[currentParagraph]?.chunks?.length || 0) - 1
           ) {
             if (currentParagraph === paragraphList.length - 1) {
-              alert('完结撒花');
+              return;
             } else {
               setCurrentParagraph(currentParagraph + 1);
               setCurrentChunks(0);
@@ -76,6 +94,15 @@ const Game = () => {
           }
         }}
         disabeldPerv={currentChunks === 0}
+      />
+      {showFireworks ? <FireworksContainer /> : <></>}
+      <CongratsModal
+        visible={showFireworks}
+        onAgainButtonClick={() => {
+          setShowFireworks(false);
+          setCurrentChunks(0);
+          setCurrentParagraph(0);
+        }}
       />
     </>
   );

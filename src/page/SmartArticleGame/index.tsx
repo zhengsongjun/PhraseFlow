@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { usePracticeTracker } from '@/hook/serviceCustomHook/usePracticeTracker';
 import TimeTracker from '../Game/TimeTracker/TimeTracker';
-import SentencePractice from '../Game/SentencePractice/SentencePractice';
+import SentencePractice from '../../components/SentencePractice/SentencePractice';
 import VerticalProgressBar from './VerticalProgressBar/VerticalProgressBar';
 import { toSmartArticleIdGetChunkList } from '@/services/chunk';
 import { Chunk } from '@/services/api/model';
 import FireworksContainer from '@/components/FireworksContainer/FireworksContainer';
 import CongratsModal from '@/components/CongratsModal/CongratsModal';
+import { updatePracticeStatistic } from '@/services/practiceStatistic';
 
 const Game = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,9 +53,17 @@ const Game = () => {
           phonetic={currentChunk.phonetic || ''}
           sentence={currentChunk.text}
           translation={currentChunk.definition}
-          onNext={() => {
+          onPassValidate={async () => {
             if (currentChunkIndex === chunks.length - 1) {
               setShowFireworks(true);
+              await updatePracticeStatistic(id as string, 'smart');
+            } else {
+              setCurrentChunkIndex(currentChunkIndex + 1);
+            }
+          }}
+          onNext={() => {
+            if (currentChunkIndex > chunks.length - 2) {
+              return;
             } else {
               setCurrentChunkIndex(currentChunkIndex + 1);
             }
@@ -64,9 +73,14 @@ const Game = () => {
       ) : (
         <></>
       )}
-      {/* {showFireworks && <FireworksContainer />} */}
-      <FireworksContainer />
-      <CongratsModal />
+      {showFireworks ? <FireworksContainer /> : <></>}
+      <CongratsModal
+        visible={showFireworks}
+        onAgainButtonClick={() => {
+          setShowFireworks(false);
+          setCurrentChunkIndex(0);
+        }}
+      />
     </>
   );
 };

@@ -1,13 +1,15 @@
 import { request } from '@/utils/request';
 
 export const updatePracticeStatistic = async (
-  articleId: string
+  articleId: string,
+  type: 'smart' | 'parctice'
 ): Promise<string> => {
   const result = await request({
     url: '/statistic',
     method: 'put',
     data: {
       articleId,
+      type,
     },
   });
   return result;

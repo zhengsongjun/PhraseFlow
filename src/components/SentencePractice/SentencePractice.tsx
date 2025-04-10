@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './SentencePractice.module.scss';
-import ShortcutFooter from '../ShortcutFooter/ShortcutFooter';
-import PronounceCard from '../PronounceCard/PronounceCard';
+import ShortcutFooter from '../../page/Game/ShortcutFooter/ShortcutFooter';
+import PronounceCard from '../../page/Game/PronounceCard/PronounceCard';
 import inputMp3 from '@/assets/input.MP3';
 interface SentencePracticeProps {
   sentence: string;
@@ -11,6 +11,7 @@ interface SentencePracticeProps {
   onPerv: () => void;
   disabeldPerv: boolean;
   speechRate?: number;
+  onPassValidate: () => void;
 }
 const isPrintableCharacter = (key: string) => {
   return key.length === 1 && !['Enter', 'Tab', ' '].includes(key);
@@ -24,6 +25,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   onNext,
   onPerv,
   disabeldPerv,
+  onPassValidate,
   speechRate,
 }) => {
   const tokens = sentence.split(/(\s+|[.,!?])/).filter((token) => token !== '');
@@ -226,21 +228,23 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   const shortcuts = isCorrect
     ? [
         {
+          keys: ['Esc'],
+          label: '再来一次',
+        },
+        {
           keys: ['Ctrl', "'"],
           label: '播放发音',
           onClick: () => playAudioMultipleTimes(sentence, 3),
         },
-        {
-          keys: ['Ctrl', 'M'],
-          label: '掌握',
-          onClick: () => console.log('掌握'),
-        },
+        // {
+        //   keys: ['Ctrl', ':'],
+        //   label: '掌握',
+        //   onClick: () => console.log('掌握'),
+        // },
         {
           keys: ['Enter'],
           label: '下一题',
-          onClick: () => {
-            // onNext();
-          }, // 你需要实现这个
+          onClick: () => {}, // 你需要实现这个
         },
         {
           keys: ['Ctrl', ':'],
@@ -258,11 +262,6 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
           keys: ['Ctrl', "'"],
           label: '播放发音',
           onClick: () => playAudioMultipleTimes(sentence, 3),
-        },
-        {
-          keys: ['Ctrl', 'M'],
-          label: '掌握',
-          onClick: () => console.log('掌握'),
         },
         {
           keys: ['Enter'],
@@ -312,14 +311,14 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ctrl + M 显示发音卡片
-      if (e.ctrlKey && e.key.toLowerCase() === 'm') {
+      // Ctrl + ; 显示发音卡片
+      if (e.ctrlKey && e.code === 'Semicolon') {
+        setPronounceCardVisible((prev) => !prev);
         e.preventDefault();
-        setPronounceCardVisible(true);
       }
 
       // Ctrl + ' 播放发音两次
-      if (e.ctrlKey && e.key === "'") {
+      if (e.ctrlKey && e.code === 'Quote') {
         e.preventDefault();
         playAudioMultipleTimes(sentence, 2);
       }
@@ -375,7 +374,11 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
     // 全局监听键盘事件
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && isCorrect) {
-        onNext();
+        setPronounceCardVisible(false);
+        onPassValidate();
+      }
+      if (e.key === 'Escape' && isCorrect) {
+        handleReset();
       }
     };
 
@@ -404,7 +407,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
               >
                 {(() => {
                   const baseCharWidth = 32;
-                  const sidePadding = 24;
+                  const sidePadding = 36;
                   const word = inputs[idx] || '';
                   const contentWidth =
                     Math.max(word.length, token.length) * baseCharWidth;
@@ -455,18 +458,6 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
           )}
         </div>
       )}
-
-      {/* {isCorrect !== null && (
-        <div
-          className={${styles.feedback} ${isCorrect ? styles.correct : styles.incorrect}}
-        >
-          {isCorrect ? '正确！' : '错误！请再试一次！'}
-        </div>
-      )} */}
-
-      {/* <button className={styles.resetButton} onClick={handleReset}>
-        重置
-      </button> */}
       <ShortcutFooter
         shortcuts={shortcuts}
         onNext={onNext}
@@ -474,6 +465,16 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
         disabledPrev={disabeldPerv}
       />
       <PronounceCard
+        style={{
+          position: 'absolute',
+          top: '-20px',
+          left: 0,
+          right: 0,
+          margin: '0 auto',
+          width: 'fit-content', // 需要指定宽度
+          textAlign: 'center',
+          zIndex: '9999',
+        }}
         word={sentence}
         phonetic={phonetic}
         visible={pronounceCardVisible}
