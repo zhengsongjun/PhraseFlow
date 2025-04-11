@@ -29,7 +29,7 @@ const PracticeTypeModal: React.FC<ModalProps> = (props) => {
           className={styles.checkboxGroup}
         >
           <Checkbox value='word'>单词</Checkbox>
-          <Checkbox value='pharses'>短语</Checkbox>
+          <Checkbox value='phrase'>短语</Checkbox>
           <Checkbox value='sentence'>句子</Checkbox>
         </Checkbox.Group>
         <div className={styles.footer}>
