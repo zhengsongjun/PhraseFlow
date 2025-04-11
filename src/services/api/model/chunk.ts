@@ -17,6 +17,8 @@ export interface Chunk {
   createdBy: string;
   /** 更新人 */
   updatedBy: string;
+  /** 段落ID */
+  paragraphId: string;
   /** 短文id */
   smartArticleId: string;
   /** 排序 */
@@ -27,4 +29,6 @@ export interface Chunk {
   phonetic: string;
   /** 翻译 */
   definition: string;
+  /** type是类型，word,phrase,sentence */
+  chunkType: string;
 }

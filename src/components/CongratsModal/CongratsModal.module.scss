@@ -79,10 +79,11 @@
 
 .footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 32px;
 
   button {
+    margin-right: 12px;
     padding: 10px 16px;
     border: none;
     background: #2a2a48;

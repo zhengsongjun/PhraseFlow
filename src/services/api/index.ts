@@ -16,6 +16,7 @@ import type {
   CreateActiveLogDto,
   CreateArticleDto,
   CreateChunkDto,
+  CreateErrorRecordDto,
   CreateParagraphDto,
   CreateSmartActicleDto,
   CreateUserDto,
@@ -355,7 +356,7 @@ const practiceStasticControllerFindByOneArticleStatistic = <TData = AxiosRespons
   }
 
 /**
- * @summary 跟新文章练习次数
+ * @summary 更新文章练习次数
  */
 const practiceStasticControllerUpdateArticle = <TData = AxiosResponse<void>>(
     updatePracticeStatistics: UpdatePracticeStatistics, options?: AxiosRequestConfig
@@ -389,7 +390,52 @@ const smartArticleControllerReate = <TData = AxiosResponse<void>>(
     );
   }
 
-return {articleControllerCreate,articleControllerFindAll,articleControllerFindOne,paragraphControllerCreate,paragraphControllerFindAll,paragraphControllerUpdate,paragraphControllerFindOne,paragraphControllerToArticleIdGetParagraphList,chunkControllerCreateSmartArticleChunk,chunkControllerToSmartArticleIdGetAllChunks,chunkControllerCreate,chunkControllerFindAll,chunkControllerToParagraphIdFindChunks,chunkControllerUpdate,chunkControllerFindOne,chunkControllerBatch,wordControllerCreate,wordControllerFindAll,wordControllerUpdate,wordControllerFindOne,userControllerCreateUser,userControllerLogin,activeLogControllerCreate,activeLogControllerGetToday,activeLogControllerGetWeek,activeLogControllerGetMonth,activeLogControllerGetMonthMap,practiceStasticControllerFindByOneArticleStatistic,practiceStasticControllerUpdateArticle,smartArticleControllerFind,smartArticleControllerReate}};
+/**
+ * @summary 删除短文
+ */
+const smartArticleControllerDeleteSmartArticle = <TData = AxiosResponse<void>>(
+    id: string, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.delete(
+      `/smart-article/${id}`,options
+    );
+  }
+
+/**
+ * @summary 创建错题
+ */
+const errorRecordControllerCreateErrorRecord = <TData = AxiosResponse<void>>(
+    createErrorRecordDto: CreateErrorRecordDto, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/error-records`,
+      createErrorRecordDto,options
+    );
+  }
+
+/**
+ * @summary 获取用户所有错题
+ */
+const errorRecordControllerGetErrorRecords = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/error-records`,options
+    );
+  }
+
+/**
+ * @summary 删除错题
+ */
+const errorRecordControllerDeleteErrorRecords = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.delete(
+      `/error-records`,options
+    );
+  }
+
+return {articleControllerCreate,articleControllerFindAll,articleControllerFindOne,paragraphControllerCreate,paragraphControllerFindAll,paragraphControllerUpdate,paragraphControllerFindOne,paragraphControllerToArticleIdGetParagraphList,chunkControllerCreateSmartArticleChunk,chunkControllerToSmartArticleIdGetAllChunks,chunkControllerCreate,chunkControllerFindAll,chunkControllerToParagraphIdFindChunks,chunkControllerUpdate,chunkControllerFindOne,chunkControllerBatch,wordControllerCreate,wordControllerFindAll,wordControllerUpdate,wordControllerFindOne,userControllerCreateUser,userControllerLogin,activeLogControllerCreate,activeLogControllerGetToday,activeLogControllerGetWeek,activeLogControllerGetMonth,activeLogControllerGetMonthMap,practiceStasticControllerFindByOneArticleStatistic,practiceStasticControllerUpdateArticle,smartArticleControllerFind,smartArticleControllerReate,smartArticleControllerDeleteSmartArticle,errorRecordControllerCreateErrorRecord,errorRecordControllerGetErrorRecords,errorRecordControllerDeleteErrorRecords}};
 export type ArticleControllerCreateResult = AxiosResponse<void>
 export type ArticleControllerFindAllResult = AxiosResponse<PaginationResult>
 export type ArticleControllerFindOneResult = AxiosResponse<void>
@@ -421,3 +467,7 @@ export type PracticeStasticControllerFindByOneArticleStatisticResult = AxiosResp
 export type PracticeStasticControllerUpdateArticleResult = AxiosResponse<void>
 export type SmartArticleControllerFindResult = AxiosResponse<void>
 export type SmartArticleControllerReateResult = AxiosResponse<void>
+export type SmartArticleControllerDeleteSmartArticleResult = AxiosResponse<void>
+export type ErrorRecordControllerCreateErrorRecordResult = AxiosResponse<void>
+export type ErrorRecordControllerGetErrorRecordsResult = AxiosResponse<void>
+export type ErrorRecordControllerDeleteErrorRecordsResult = AxiosResponse<void>

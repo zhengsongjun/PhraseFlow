@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './CongratsModal.module.scss';
 
 interface ICongratsModalProps {
   visible: boolean;
   onAgainButtonClick: () => void;
+  onEscPress?: () => void;
+  onEnterPress?: () => void;
 }
 
 const CongratsModal: React.FC<ICongratsModalProps> = (props) => {
-  const { visible, onAgainButtonClick } = props;
+  const { visible, onAgainButtonClick, onEscPress, onEnterPress } = props;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!visible) return;
+
+      if (e.key === 'Escape') {
+        onEscPress?.(); // 按下 Esc 时调用
+      } else if (e.key === 'Enter') {
+        onEnterPress?.(); // 按下 Enter 时调用
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [visible, onEscPress, onEnterPress]);
+
   return (
     <>
       {visible ? (
@@ -48,9 +68,37 @@ const CongratsModal: React.FC<ICongratsModalProps> = (props) => {
                   onAgainButtonClick();
                 }}
               >
+                <span
+                  style={{
+                    border: '1px solid #ccc',
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                    marginRight: '6px',
+                    fontSize: '12px',
+                    backgroundColor: '#f0f0f0',
+                    color: 'black',
+                  }}
+                >
+                  Esc
+                </span>
                 再来一次
               </button>
-              <button>下一课</button>
+              {/* <button>
+                <span
+                  style={{
+                    border: '1px solid #ccc',
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                    marginRight: '6px',
+                    fontSize: '12px',
+                    backgroundColor: '#f0f0f0',
+                    color: 'black',
+                  }}
+                >
+                  ⏎
+                </span>
+                下一课
+              </button> */}
             </div>
           </div>
         </div>

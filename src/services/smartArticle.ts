@@ -20,3 +20,8 @@ export const createSmartArticle = async (data: any) => {
     ...result,
   };
 };
+
+export const deleteSmartArticle = async (id: string) => {
+  const result = request({ url: `/smart-article/${id}`, method: 'delete' });
+  return result;
+};

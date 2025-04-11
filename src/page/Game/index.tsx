@@ -7,6 +7,7 @@ import { usePracticeTracker } from '@/hook/serviceCustomHook/usePracticeTracker'
 import TimeTracker from './TimeTracker/TimeTracker';
 import FireworksContainer from '@/components/FireworksContainer/FireworksContainer';
 import CongratsModal from '@/components/CongratsModal/CongratsModal';
+import { updatePracticeStatistic } from '@/services/practiceStatistic';
 
 const Game = () => {
   const { id } = useParams<{ id: string }>();
@@ -63,13 +64,14 @@ const Game = () => {
         phonetic={currentChunk?.phonetic || ''}
         sentence={sentence}
         translation={translation}
-        onPassValidate={() => {
+        onPassValidate={async () => {
           if (
             currentChunks ===
             (paragraphList?.[currentParagraph]?.chunks?.length || 0) - 1
           ) {
             if (currentParagraph === paragraphList.length - 1) {
               setShowFireworks(true);
+              await updatePracticeStatistic(id as string, 'parctice');
             } else {
               setCurrentParagraph(currentParagraph + 1);
               setCurrentChunks(0);

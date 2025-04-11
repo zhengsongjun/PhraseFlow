@@ -11,6 +11,7 @@ export * from './chunk';
 export * from './createActiveLogDto';
 export * from './createArticleDto';
 export * from './createChunkDto';
+export * from './createErrorRecordDto';
 export * from './createParagraphDto';
 export * from './createSmartActicleDto';
 export * from './createUserDto';
