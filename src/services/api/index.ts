@@ -17,7 +17,6 @@ import type {
   CreateArticleDto,
   CreateChunkDto,
   CreateErrorRecordDto,
-  CreateParagraphDto,
   CreateSmartActicleDto,
   CreateUserDto,
   CreateWordDto,
@@ -26,7 +25,6 @@ import type {
   Paragraph,
   PracticeStasticControllerFindByOneArticleStatisticParams,
   UpdateChunkDto,
-  UpdateParagraphDto,
   UpdatePracticeStatistics,
   UpdateWordDto
 } from './model';
@@ -64,49 +62,37 @@ const articleControllerFindOne = <TData = AxiosResponse<void>>(
   }
 
 /**
- * @summary 创建段落
+ * @summary 删除文章
  */
-const paragraphControllerCreate = <TData = AxiosResponse<void>>(
-    createParagraphDto: CreateParagraphDto, options?: AxiosRequestConfig
+const articleControllerDeleteArticleToId = <TData = AxiosResponse<void>>(
+    id: string, options?: AxiosRequestConfig
  ): Promise<TData> => {
-    return axios.post(
-      `/paragraphs`,
-      createParagraphDto,options
+    return axios.delete(
+      `/articles/${id}`,options
     );
   }
 
 /**
- * @summary 获取所有段落
+ * @summary 获取文章全部内容
  */
-const paragraphControllerFindAll = <TData = AxiosResponse<void>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/paragraphs`,options
-    );
-  }
-
-/**
- * @summary 更新段落内容或翻译
- */
-const paragraphControllerUpdate = <TData = AxiosResponse<void>>(
-    id: string,
-    updateParagraphDto: UpdateParagraphDto, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.patch(
-      `/paragraphs/${id}`,
-      updateParagraphDto,options
-    );
-  }
-
-/**
- * @summary 获取段落详情
- */
-const paragraphControllerFindOne = <TData = AxiosResponse<void>>(
+const articleControllerToArticlIdGetContent = <TData = AxiosResponse<void>>(
     id: string, options?: AxiosRequestConfig
  ): Promise<TData> => {
     return axios.get(
-      `/paragraphs/${id}`,options
+      `/articles/content/${id}`,options
+    );
+  }
+
+/**
+ * @summary 段落导入
+ */
+const paragraphControllerBatchCreateParagraphsAndChunk = <TData = AxiosResponse<void>>(
+    id: string,
+    paragraphControllerBatchCreateParagraphsAndChunkBody: string[], options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/paragraphs/aticle/paragraphs/${id}`,
+      paragraphControllerBatchCreateParagraphsAndChunkBody,options
     );
   }
 
@@ -200,6 +186,17 @@ const chunkControllerFindOne = <TData = AxiosResponse<void>>(
  ): Promise<TData> => {
     return axios.get(
       `/chunks/${id}`,options
+    );
+  }
+
+/**
+ * @summary 添加文章新chunk
+ */
+const chunkControllerAddNewChunks = <TData = AxiosResponse<void>>(
+    id: string, options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/chunks/${id}`,undefined,options
     );
   }
 
@@ -435,14 +432,47 @@ const errorRecordControllerDeleteErrorRecords = <TData = AxiosResponse<void>>(
     );
   }
 
-return {articleControllerCreate,articleControllerFindAll,articleControllerFindOne,paragraphControllerCreate,paragraphControllerFindAll,paragraphControllerUpdate,paragraphControllerFindOne,paragraphControllerToArticleIdGetParagraphList,chunkControllerCreateSmartArticleChunk,chunkControllerToSmartArticleIdGetAllChunks,chunkControllerCreate,chunkControllerFindAll,chunkControllerToParagraphIdFindChunks,chunkControllerUpdate,chunkControllerFindOne,chunkControllerBatch,wordControllerCreate,wordControllerFindAll,wordControllerUpdate,wordControllerFindOne,userControllerCreateUser,userControllerLogin,activeLogControllerCreate,activeLogControllerGetToday,activeLogControllerGetWeek,activeLogControllerGetMonth,activeLogControllerGetMonthMap,practiceStasticControllerFindByOneArticleStatistic,practiceStasticControllerUpdateArticle,smartArticleControllerFind,smartArticleControllerReate,smartArticleControllerDeleteSmartArticle,errorRecordControllerCreateErrorRecord,errorRecordControllerGetErrorRecords,errorRecordControllerDeleteErrorRecords}};
+/**
+ * @summary 建立名言
+ */
+const quotesControllerCreate = <TData = AxiosResponse<void>>(
+    quotesControllerCreateBody: string[], options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.post(
+      `/quotes`,
+      quotesControllerCreateBody,options
+    );
+  }
+
+/**
+ * @summary 查询所有名言
+ */
+const quotesControllerFindAll = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/quotes`,options
+    );
+  }
+
+/**
+ * @summary 随机查询一个名言
+ */
+const quotesControllerFindRandomQuote = <TData = AxiosResponse<void>>(
+     options?: AxiosRequestConfig
+ ): Promise<TData> => {
+    return axios.get(
+      `/quotes/random`,options
+    );
+  }
+
+return {articleControllerCreate,articleControllerFindAll,articleControllerFindOne,articleControllerDeleteArticleToId,articleControllerToArticlIdGetContent,paragraphControllerBatchCreateParagraphsAndChunk,paragraphControllerToArticleIdGetParagraphList,chunkControllerCreateSmartArticleChunk,chunkControllerToSmartArticleIdGetAllChunks,chunkControllerCreate,chunkControllerFindAll,chunkControllerToParagraphIdFindChunks,chunkControllerUpdate,chunkControllerFindOne,chunkControllerAddNewChunks,chunkControllerBatch,wordControllerCreate,wordControllerFindAll,wordControllerUpdate,wordControllerFindOne,userControllerCreateUser,userControllerLogin,activeLogControllerCreate,activeLogControllerGetToday,activeLogControllerGetWeek,activeLogControllerGetMonth,activeLogControllerGetMonthMap,practiceStasticControllerFindByOneArticleStatistic,practiceStasticControllerUpdateArticle,smartArticleControllerFind,smartArticleControllerReate,smartArticleControllerDeleteSmartArticle,errorRecordControllerCreateErrorRecord,errorRecordControllerGetErrorRecords,errorRecordControllerDeleteErrorRecords,quotesControllerCreate,quotesControllerFindAll,quotesControllerFindRandomQuote}};
 export type ArticleControllerCreateResult = AxiosResponse<void>
 export type ArticleControllerFindAllResult = AxiosResponse<PaginationResult>
 export type ArticleControllerFindOneResult = AxiosResponse<void>
-export type ParagraphControllerCreateResult = AxiosResponse<void>
-export type ParagraphControllerFindAllResult = AxiosResponse<void>
-export type ParagraphControllerUpdateResult = AxiosResponse<void>
-export type ParagraphControllerFindOneResult = AxiosResponse<void>
+export type ArticleControllerDeleteArticleToIdResult = AxiosResponse<void>
+export type ArticleControllerToArticlIdGetContentResult = AxiosResponse<void>
+export type ParagraphControllerBatchCreateParagraphsAndChunkResult = AxiosResponse<void>
 export type ParagraphControllerToArticleIdGetParagraphListResult = AxiosResponse<Paragraph[]>
 export type ChunkControllerCreateSmartArticleChunkResult = AxiosResponse<void>
 export type ChunkControllerToSmartArticleIdGetAllChunksResult = AxiosResponse<void>
@@ -451,6 +481,7 @@ export type ChunkControllerFindAllResult = AxiosResponse<void>
 export type ChunkControllerToParagraphIdFindChunksResult = AxiosResponse<Chunk[]>
 export type ChunkControllerUpdateResult = AxiosResponse<void>
 export type ChunkControllerFindOneResult = AxiosResponse<void>
+export type ChunkControllerAddNewChunksResult = AxiosResponse<void>
 export type ChunkControllerBatchResult = AxiosResponse<void>
 export type WordControllerCreateResult = AxiosResponse<void>
 export type WordControllerFindAllResult = AxiosResponse<void>
@@ -471,3 +502,6 @@ export type SmartArticleControllerDeleteSmartArticleResult = AxiosResponse<void>
 export type ErrorRecordControllerCreateErrorRecordResult = AxiosResponse<void>
 export type ErrorRecordControllerGetErrorRecordsResult = AxiosResponse<void>
 export type ErrorRecordControllerDeleteErrorRecordsResult = AxiosResponse<void>
+export type QuotesControllerCreateResult = AxiosResponse<void>
+export type QuotesControllerFindAllResult = AxiosResponse<void>
+export type QuotesControllerFindRandomQuoteResult = AxiosResponse<void>

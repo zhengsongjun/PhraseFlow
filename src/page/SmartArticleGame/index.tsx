@@ -61,7 +61,8 @@ const Game = () => {
           transform: 'translateY(-50%)',
           zIndex: 999,
         }}
-        progress={Math.round((currentChunkIndex / (chunks.length || 1)) * 100)}
+        total={chunks.length}
+        current={currentChunkIndex + 1}
       />
       {currentChunk ? (
         <SentencePractice
@@ -78,7 +79,6 @@ const Game = () => {
           translation={currentChunk.definition}
           onPassValidate={async () => {
             if (currentChunkIndex === chunks.length - 1) {
-              // 播放vMp3音效
               setShowFireworks(true);
               playSuccessSound();
               await updatePracticeStatistic(id as string, 'smart');

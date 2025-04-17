@@ -30,7 +30,7 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({
   const currentPath = useMatch('*')?.pathname || '';
 
   const formattedMenu = filterMenuItems(menu);
-
+  console.log(formattedMenu);
   return (
     <ConfigProvider
       theme={{

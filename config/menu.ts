@@ -27,43 +27,32 @@ const menuData: MenuItem[] = [
     disabledShowMenu: true,
   },
   {
-    path: '/game/:id',
+    path: '/game/:id/:type',
     icon: 'xxx',
     element: 'Game',
     name: '游戏',
     disabledShowMenu: true,
   },
-  // {
-  //   path: '/user',
-  //   name: '用户',
-  //   icon: 'UserOutlined',
-  //   element: 'User',
-  //   children: [
-  //     {
-  //       path: 'config',
-  //       name: '用户配置',
-  //       icon: 'UserOutlined',
-  //       element: 'UserConfig',
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: '/products',
-  //   name: '产品',
-  //   icon: 'LaptopOutlined',
-  //   element: 'Products',
-  // },
-  // {
-  //   path: '/notifications',
-  //   name: '消息',
-  //   icon: 'NotificationOutlined',
-  //   element: 'Notifications',
-  // },
   {
     path: '/article',
     name: '文章',
     icon: 'NotificationOutlined',
     element: 'Article',
+    children: [
+      {
+        name: '文章',
+        path: '/article/page',
+        icon: 'NotificationOutlined',
+        element: 'ArticleTablePage',
+      },
+      {
+        name: '文章',
+        path: '/article/create/:id',
+        icon: 'NotificationOutlined',
+        element: 'AddArticle',
+        disabledShowMenu: true,
+      },
+    ],
   },
   {
     path: '*',

@@ -1,0 +1,70 @@
+.container {
+  padding: 24px;
+  background-color: #1f1f1f;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.card {
+  background: #2b2b2b;
+  border: 1px solid #3f3f3f;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #ccc;
+  margin-bottom: 12px;
+  cursor: grab;
+}
+
+.chunkCard {
+  background: #1a1a1a;
+  border: 1px dashed #555;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.input {
+  margin-bottom: 8px;
+  width: 200px;
+  background-color: #141414;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.field {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #ccc;
+}
+
+.chunkList {
+  margin-top: 12px;
+}
+
+.actions {
+  margin-top: 24px;
+}
+
+/* 针对 textarea 使用更宽样式 */
+.textArea {
+  width: 100%;
+  margin-bottom: 8px;
+  background-color: #141414;
+  border: 1px solid #444;
+  color: #fff;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 64px;
+}

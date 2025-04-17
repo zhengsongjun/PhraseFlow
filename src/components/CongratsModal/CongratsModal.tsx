@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './CongratsModal.module.scss';
+import { getRandomQuote } from '@/services/quote';
+import { Link } from 'react-router-dom';
 
 interface ICongratsModalProps {
   visible: boolean;
@@ -10,6 +12,22 @@ interface ICongratsModalProps {
 
 const CongratsModal: React.FC<ICongratsModalProps> = (props) => {
   const { visible, onAgainButtonClick, onEscPress, onEnterPress } = props;
+  const [quote, setQuote] = useState({ english: '', chinese: '', author: '' });
+
+  const handleGetQuote = async () => {
+    const result = await getRandomQuote();
+    setQuote({
+      english: result.quoteEn,
+      chinese: result.quotenZh,
+      author: result.author,
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      handleGetQuote();
+    }
+  }, [visible]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -35,15 +53,10 @@ const CongratsModal: React.FC<ICongratsModalProps> = (props) => {
           <div className={styles.modal}>
             <div className={styles.header}>🎉 恭喜！</div>
             <div className={styles.quote}>
-              <div className={styles.english}>
-                Genuine effort turns challenges into stepping stones for real
-                growth.
-              </div>
-              <div className={styles.chinese}>
-                真诚的努力，能将阻碍转化为真正进步的垫脚石。
-              </div>
+              <div className={styles.english}>{quote.english}</div>
+              <div className={styles.chinese}>{quote.chinese}</div>
             </div>
-            <div className={styles.meta}>—— 金山词霸「每日一句」</div>
+            <div className={styles.meta}>-- {quote.author}</div>
 
             <div className={styles.blocks}>
               <div className={styles.block}>
@@ -83,22 +96,24 @@ const CongratsModal: React.FC<ICongratsModalProps> = (props) => {
                 </span>
                 再来一次
               </button>
-              {/* <button>
-                <span
-                  style={{
-                    border: '1px solid #ccc',
-                    padding: '2px 6px',
-                    borderRadius: '4px',
-                    marginRight: '6px',
-                    fontSize: '12px',
-                    backgroundColor: '#f0f0f0',
-                    color: 'black',
-                  }}
-                >
-                  ⏎
-                </span>
-                下一课
-              </button> */}
+              <Link to='/index'>
+                <button>
+                  <span
+                    style={{
+                      border: '1px solid #ccc',
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                      marginRight: '6px',
+                      fontSize: '12px',
+                      backgroundColor: '#f0f0f0',
+                      color: 'black',
+                    }}
+                  >
+                    ⏎
+                  </span>
+                  回到首页
+                </button>
+              </Link>
             </div>
           </div>
         </div>

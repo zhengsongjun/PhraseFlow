@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import ShortcutFooter from '../../page/Game/ShortcutFooter/ShortcutFooter';
 import PronounceCard from '../../page/Game/PronounceCard/PronounceCard';
 import styles from './SentencePractice.module.scss';
+import { Howl } from 'howler';
 import inputMp3 from '@/assets/input.MP3';
 import dingMp3 from '@/assets/ding.mp3';
-import { App } from 'antd';
 interface SentencePracticeProps {
   /**禁用一切键盘事件*/
   disabled: boolean;
@@ -36,7 +36,6 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   addErrorRecord,
   disabled,
 }) => {
-  const { message } = App.useApp();
   const tokens = sentence.split(/(\s+|[.,!?])/).filter((token) => token !== '');
   const wordIndices = tokens
     .map((token, idx) => (isWord(token) ? idx : -1))
@@ -49,7 +48,6 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   const [touchedIndices, setTouchedIndices] = useState<number[]>([]);
   const inputAudioRef = useRef<HTMLAudioElement | null>(null);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const isRepeatModalRef = useRef(false);
 
   const playSuccessSound = () => {
     const sound = new Howl({
@@ -60,36 +58,27 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   };
 
   const playAudioMultipleTimes = (text: string, times: number) => {
+    if (!text || times <= 0) return;
+
     let count = 0;
 
     const play = () => {
       if (count >= times) return;
+
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
-      utterance.rate = speechRate ?? 0.9; // 👈 使用传入的语速
+      utterance.rate = speechRate ?? 0.9;
+
       utterance.onend = () => {
         count++;
-        play();
+        play(); // 播放下一次
       };
+
       speechSynthesis.speak(utterance);
     };
 
-    speechSynthesis.cancel();
-    play();
-  };
-
-  const resetStates = () => {
-    setInputs(tokens.map(() => '')); // 清空输入框
-    setIsCorrect(null); // 重置验证结果
-    setWrongIndices([]); // 清空错误索引
-    setTouchedIndices([]); // 清空已触碰索引
-
-    const firstWord = wordIndices[0];
-    if (firstWord !== undefined) {
-      inputRefs.current[firstWord]?.focus(); // 聚焦到第一个单词
-    }
-
-    playAudioMultipleTimes(sentence, 3); // 重播语音
+    speechSynthesis.cancel(); // 取消其他正在播放的
+    play(); // 开始第一次播放
   };
 
   const handleInputChange = (index: number, value: string) => {
@@ -142,7 +131,6 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
 
   const handleSubmit = () => {
     const wrong: number[] = [];
-
     // 检查每个单词是否正确
     tokens.forEach((token, idx) => {
       if (isWord(token)) {
@@ -157,6 +145,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
     setWrongIndices(wrong);
     if (wrong.length === 0) {
       playSuccessSound();
+      return;
     }
     // 如果有错误，聚焦到第一个错误位置
     if (wrong.length > 0) {
@@ -265,7 +254,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
         {
           keys: ['Enter'],
           label: '下一题',
-          onClick: () => {}, // 你需要实现这个
+          onClick: () => {},
         },
         {
           keys: ['Ctrl', ':'],
@@ -284,10 +273,6 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
           label: '添加错题本',
         },
         {
-          keys: ['Ctrl', 'p'],
-          label: isRepeatModalRef.current ? '退出重复模式' : '进入重复模式',
-        },
-        {
           keys: ['Ctrl', "'"],
           label: '播放发音',
           onClick: () => playAudioMultipleTimes(sentence, 3),
@@ -295,7 +280,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
         {
           keys: ['Enter'],
           label: '提交',
-          // onClick: () => handleSubmit(), // 你需要添加该函数逻辑
+          // 你可以在这绑定 handleSubmit
         },
         {
           keys: ['Ctrl', ':'],
@@ -306,12 +291,12 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
 
   useEffect(() => {
     const firstWordIndex = wordIndices[0];
+    // 播放 3 次发音
+    // playAudioMultipleTimes(sentence, 3);
+    console.log('播放三次发音');
     if (firstWordIndex !== undefined) {
       inputRefs.current[firstWordIndex]?.focus();
     }
-
-    // 播放 3 次发音
-    playAudioMultipleTimes(sentence, 3);
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
@@ -335,10 +320,6 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   }, [sentence]);
 
   useEffect(() => {
-    console.log(isCorrect, '变化');
-  }, [isCorrect]);
-
-  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!disabled) {
         // Ctrl + ; 显示发音卡片
@@ -347,10 +328,9 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
           e.preventDefault();
         }
 
-        // Ctrl + ' 播放发音两次
         if (e.ctrlKey && e.code === 'Quote') {
           e.preventDefault();
-          playAudioMultipleTimes(sentence, 2);
+          playAudioMultipleTimes(sentence, 1);
         }
       }
     };
@@ -375,56 +355,41 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   };
 
   useEffect(() => {
+    // playAudioMultipleTimes(sentence, 3);
     setInputs(tokens.map(() => ''));
     setIsCorrect(null);
     setWrongIndices([]);
     setTouchedIndices([]);
 
-    // 默认高亮逻辑应该放在这里 👇
     const firstWord = wordIndices[0];
-    setFocusedIndex(firstWord ?? null); // 设置为高亮
+    setFocusedIndex(firstWord ?? null);
     speechSynthesis.cancel();
-    const timer = setTimeout(() => {
-      playAudioMultipleTimes(sentence, 2);
-    }, 300);
 
     setTimeout(() => {
       if (firstWord !== undefined) {
         inputRefs.current[firstWord]?.focus();
       }
     }, 0);
-    return () => {
-      clearTimeout(timer); // 组件更新前清除上一次定时器
-    };
-  }, [sentence, translation, phonetic]);
+    // 👇 只在 sentence 变更时触发
+  }, [sentence]);
+
   useEffect(() => {
     inputAudioRef.current = new Audio(inputMp3);
   }, []);
 
   useEffect(() => {
-    // 全局监听键盘事件
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (!disabled) {
         if (e.ctrlKey && e.code === 'KeyM') {
           addErrorRecord();
         }
         if (e.key === 'Enter' && isCorrect) {
-          if (!isRepeatModalRef.current) {
-            setPronounceCardVisible(false);
-            onPassValidate();
-          } else {
-            handleReset();
-          }
+          setPronounceCardVisible(false);
+          // 延迟进入下一题，展示结果卡片 2 秒
+          onPassValidate();
         }
         if (e.key === 'Escape' && isCorrect) {
           handleReset();
-        }
-        if ((e.ctrlKey || e.metaKey) && e.code === 'KeyP') {
-          console.log('执行');
-          isRepeatModalRef.current = !isRepeatModalRef.current;
-          message.info(
-            isRepeatModalRef.current ? '进入重复模式' : '退出重复模式'
-          );
         }
       }
     };
@@ -465,7 +430,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
                       <input
                         ref={(el) => (inputRefs.current[idx] = el)}
                         type='text'
-                        value={inputs[idx]}
+                        value={inputs[idx] ?? ''}
                         onChange={(e) => handleInputChange(idx, e.target.value)}
                         onKeyDown={(e) => handleKeyDown(e, idx)}
                         onFocus={() => {

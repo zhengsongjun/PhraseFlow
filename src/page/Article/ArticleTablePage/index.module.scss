@@ -46,6 +46,11 @@
     bottom: 10px;
     right: 6px;
     display: none;
+    gap: 8px; // 按钮间距
+    button {
+      padding: 4px 10px;
+      font-size: 12px;
+    }
   }
   &:hover {
     transform: translateY(-4px);

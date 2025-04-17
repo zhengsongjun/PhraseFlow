@@ -2,42 +2,52 @@ import useToArticleIdGetChunk from '@/hook/serviceCustomHook/useToArticleIdGetCh
 import { useParams } from 'react-router-dom';
 import CardSet from './CardSet/CardSet';
 import SentencePractice from '../../components/SentencePractice/SentencePractice';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePracticeTracker } from '@/hook/serviceCustomHook/usePracticeTracker';
 import TimeTracker from './TimeTracker/TimeTracker';
 import FireworksContainer from '@/components/FireworksContainer/FireworksContainer';
 import CongratsModal from '@/components/CongratsModal/CongratsModal';
 import { updatePracticeStatistic } from '@/services/practiceStatistic';
-
+import vMp3 from '@/assets/v.mp3';
 const Game = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, type: jsonType } = useParams<{ id: string; type: string }>();
   const { activeTime } = usePracticeTracker({ page: 'particle' });
-  const { paragraphList } = useToArticleIdGetChunk(id as string);
+  const type = JSON.parse(jsonType as string);
+  const { paragraphList } = useToArticleIdGetChunk(id as string, type);
   const [currentParagraph, setCurrentParagraph] = useState(0);
-  const [currentChunks, setCurrentChunks] = useState(0);
+  const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
   const [showFireworks, setShowFireworks] = useState(false);
   const currentChunk =
-    paragraphList?.[currentParagraph]?.chunks?.[currentChunks];
+    paragraphList?.[currentParagraph]?.chunks?.[currentChunkIndex];
   const sentence = currentChunk?.text || '';
   const translation = currentChunk?.definition || '';
   const [processList, setProcessList] = useState<number[]>([]);
+  const soundRef = useRef<Howl | null>(null);
+  const playSuccessSound = () => {
+    const sound = new Howl({
+      src: [vMp3],
+      volume: 1,
+    });
+    sound.play();
+    soundRef.current = sound;
+  };
 
   useEffect(() => {
     const newProcessList = paragraphList.map((_, index) => {
       return index === 0 ? 1 : 0;
     });
+
     setProcessList(newProcessList);
   }, [paragraphList]);
 
   useEffect(() => {
     if (!paragraphList.length) return;
-
     setProcessList((prev) => {
       const updated = [...prev];
-      updated[currentParagraph] = currentChunks + 1;
+      updated[currentParagraph] = currentChunkIndex + 1;
       return updated;
     });
-  }, [currentChunks, currentParagraph]);
+  }, [currentChunkIndex, currentParagraph]);
 
   return (
     <>
@@ -53,56 +63,62 @@ const Game = () => {
         current={currentParagraph}
         onCardItemClick={(index) => {
           setCurrentParagraph(index);
-          setCurrentChunks(0);
+          setCurrentChunkIndex(0);
         }}
       />
       <SentencePractice
         onPerv={() => {
-          setCurrentChunks(currentChunks - 1);
+          setCurrentChunkIndex(currentChunkIndex - 1);
         }}
-        speechRate={0.8}
+        speechRate={1}
         phonetic={currentChunk?.phonetic || ''}
         sentence={sentence}
         translation={translation}
         onPassValidate={async () => {
           if (
-            currentChunks ===
+            currentChunkIndex ===
             (paragraphList?.[currentParagraph]?.chunks?.length || 0) - 1
           ) {
             if (currentParagraph === paragraphList.length - 1) {
               setShowFireworks(true);
+              setShowFireworks(true);
+              playSuccessSound();
               await updatePracticeStatistic(id as string, 'parctice');
             } else {
               setCurrentParagraph(currentParagraph + 1);
-              setCurrentChunks(0);
+              setCurrentChunkIndex(0);
             }
           } else {
-            setCurrentChunks(currentChunks + 1);
+            setCurrentChunkIndex(currentChunkIndex + 1);
           }
         }}
         onNext={() => {
           if (
-            currentChunks ===
+            currentChunkIndex ===
             (paragraphList?.[currentParagraph]?.chunks?.length || 0) - 1
           ) {
             if (currentParagraph === paragraphList.length - 1) {
               return;
             } else {
               setCurrentParagraph(currentParagraph + 1);
-              setCurrentChunks(0);
+              setCurrentChunkIndex(0);
             }
           } else {
-            setCurrentChunks(currentChunks + 1);
+            setCurrentChunkIndex(currentChunkIndex + 1);
           }
         }}
-        disabeldPerv={currentChunks === 0}
+        disabeldPerv={currentChunkIndex === 0}
+        disabled={false}
+        addErrorRecord={function (): void {
+          throw new Error('Function not implemented.');
+        }}
       />
       {showFireworks ? <FireworksContainer /> : <></>}
       <CongratsModal
         visible={showFireworks}
         onAgainButtonClick={() => {
           setShowFireworks(false);
-          setCurrentChunks(0);
+          setCurrentChunkIndex(0);
           setCurrentParagraph(0);
         }}
       />

@@ -8,41 +8,54 @@ import {
   Card,
   Typography,
   App,
+  Popconfirm,
 } from 'antd';
+import styles from './index.module.scss';
 import { PlusOutlined } from '@ant-design/icons';
 import { useProTableRequest } from '@/hook/useTableSearch';
-import {
-  createSmartArticle,
-  deleteSmartArticle,
-  getSmartArticleList,
-} from '@/services/smartArticle';
-import PracticeTypeModal from '@/components/PracticeTypeModal/PracticeTypeModal';
-import { useNavigate } from 'react-router-dom';
 import image from '@/assets/R.jpeg';
-import styles from './index.module.scss';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  articleControllerCreate,
+  deleteArtilceToId,
+  getArticleList,
+} from '@/services/article';
+import PracticeTypeModal from '@/components/PracticeTypeModal/PracticeTypeModal';
 const { Title } = Typography;
 
-const SmartArticle: React.FC = () => {
+const ArticlePage: React.FC = () => {
   const { message } = App.useApp();
   const navigate = useNavigate();
   const { data, page } = useProTableRequest({
-    requestService: getSmartArticleList,
+    requestService: getArticleList,
     initialPage: { pageNum: 1, pageSize: 10 },
   });
-  const [practiceModalVisble, setPracticeModalVisble] = useState(false);
   const [search, setSearch] = useState('');
   const [visible, setVisible] = useState(false);
-  const [newArticle, setNewArticle] = useState({ title: '', descript: '' });
-  const [currentSmartArticleId, setCurrentSmartArticleId] = useState('');
+  const [newArticle, setNewArticle] = useState({ title: '', content: '' });
+  const [practiceModalVisble, setPracticeModalVisble] = useState(false);
+  const [currentArticleId, setCurrentArticleId] = useState('');
   const handleAdd = async () => {
-    if (!newArticle.title || !newArticle.descript) return;
+    if (!newArticle.title || !newArticle.content) return;
     try {
+      await articleControllerCreate({ ...newArticle });
       setVisible(false);
-      setNewArticle({ title: '', descript: '' });
-      await createSmartArticle({ ...newArticle });
+      setNewArticle({ title: '', content: '' });
       message.success('创建成功！');
+      // onSearch(params);
     } catch (e) {
       message.error('创建失败');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteArtilceToId(id); // 假设你的接口是这样
+      message.success('删除成功');
+      // 可以触发刷新或重新请求文章列表
+      window.location.reload(); // 或者调用原来的数据请求函数
+    } catch (error) {
+      message.error('删除失败');
     }
   };
 
@@ -50,7 +63,7 @@ const SmartArticle: React.FC = () => {
     <div className={styles.page}>
       <Breadcrumb className={styles.breadcrumb}>
         <Breadcrumb.Item>首页</Breadcrumb.Item>
-        <Breadcrumb.Item>短文管理</Breadcrumb.Item>
+        <Breadcrumb.Item>文章管理</Breadcrumb.Item>
       </Breadcrumb>
 
       <div className={styles.header}>
@@ -67,44 +80,41 @@ const SmartArticle: React.FC = () => {
           icon={<PlusOutlined />}
           onClick={() => setVisible(true)}
         >
-          添加短文
+          添加文章
         </Button>
       </div>
 
       <div className={styles.cardList}>
-        {data.map((item: any) => (
+        {data.map((item) => (
           <Card
             key={item.title}
             className={styles.card}
             cover={<img alt='cover' src={image} />}
-            styles={{ body: { paddingTop: 4, paddingBottom: 40 } }}
           >
-            <Title level={5} style={{ marginTop: 4 }}>
-              {item.title}
-            </Title>
-            <p style={{ color: '#999', marginBottom: 8 }}>
-              已练习 {item.count} 次
-            </p>
+            <Title level={5}>{item.title}</Title>
             <p>{item.content}</p>
             <div className={styles.cardOperator}>
               <Button
                 style={{ marginRight: '12px' }}
                 onClick={() => {
-                  setCurrentSmartArticleId(item.id);
+                  setCurrentArticleId(item.id);
                   setPracticeModalVisble(true);
                 }}
               >
                 开始练习
               </Button>
-              <Button style={{ marginRight: '12px' }}>编辑</Button>
-              <Button
-                style={{ marginRight: '12px' }}
-                onClick={() => {
-                  deleteSmartArticle(item.id);
-                }}
-              >
-                删除
+              <Button style={{ marginRight: '10px' }}>
+                <Link to={`/article/create/${item.id}`}>编辑</Link>
               </Button>
+              <Popconfirm
+                title='确定删除该文章吗？'
+                onConfirm={() => handleDelete(item.id)}
+                okText='删除'
+                cancelText='取消'
+              >
+                <Button danger>删除</Button>
+              </Popconfirm>
+              {/* <Button style={{ marginRight: '10px' }}>新增段落</Button> */}
             </div>
           </Card>
         ))}
@@ -121,7 +131,7 @@ const SmartArticle: React.FC = () => {
       />
 
       <Modal
-        title='添加短文文章'
+        title='添加文章'
         open={visible}
         onOk={handleAdd}
         onCancel={() => setVisible(false)}
@@ -136,9 +146,9 @@ const SmartArticle: React.FC = () => {
         />
         <Input.TextArea
           placeholder='文章内容'
-          value={newArticle.descript}
+          value={newArticle.content}
           onChange={(e) =>
-            setNewArticle({ ...newArticle, descript: e.target.value })
+            setNewArticle({ ...newArticle, content: e.target.value })
           }
           rows={4}
           className={styles.input}
@@ -146,17 +156,15 @@ const SmartArticle: React.FC = () => {
       </Modal>
       <PracticeTypeModal
         onOk={(e) => {
-          navigate(
-            `/smart-article-game/${currentSmartArticleId}/${JSON.stringify(e)}`
-          );
+          navigate(`/game/${currentArticleId}/${JSON.stringify(e)}`);
         }}
         onCancel={() => {
           setPracticeModalVisble(false);
-          setCurrentSmartArticleId('');
+          setCurrentArticleId('');
         }}
         onClose={() => {
           setPracticeModalVisble(false);
-          setCurrentSmartArticleId('');
+          setCurrentArticleId('');
         }}
         open={practiceModalVisble}
       />
@@ -164,4 +172,4 @@ const SmartArticle: React.FC = () => {
   );
 };
 
-export default SmartArticle;
+export default ArticlePage;

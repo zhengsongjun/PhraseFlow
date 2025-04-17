@@ -21,6 +21,4 @@ export interface Article {
   title: string;
   /** 文章内容 */
   content: string;
-  /** Related Paragraphs */
-  paragraphs: string[];
 }
