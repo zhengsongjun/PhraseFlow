@@ -7,15 +7,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import {
-  Input,
-  Button,
-  Space,
-  Upload,
-  message,
-  Select,
-  UploadProps,
-} from 'antd';
+import { Input, Button, Space, Upload, Select, UploadProps, App } from 'antd';
 import {
   SaveOutlined,
   UploadOutlined,
@@ -213,6 +205,7 @@ const ChunkCard = ({ chunk, onChange, onDelete }: ChunkCardProps) => {
 };
 
 const SortableEditableList = () => {
+  const { message } = App.useApp();
   const { id } = useParams<{ id: string }>();
   const [items, setItems] = useState<ParagraphContainer[]>([]);
   const { paragraphList } = useToArticleIdGetChunk(id as string);
@@ -317,8 +310,12 @@ const SortableEditableList = () => {
   };
 
   const handleSave = async () => {
-    await updateArticleContent(id as string, items);
-    message.success('数据已保存到控制台');
+    try {
+      await updateArticleContent(id as string, items);
+      message.success('数据已保存到控制台');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleUpload: UploadProps['beforeUpload'] = (file) => {

@@ -8,6 +8,13 @@ const menuData: MenuItem[] = [
     element: 'Index',
   },
   {
+    path: '/read',
+    name: '朗读',
+    icon: 'UserOutlined',
+    element: 'ReadPage',
+    disabledShowMenu: true,
+  },
+  {
     path: '/error-records',
     name: '错题本',
     icon: 'UserOutlined',

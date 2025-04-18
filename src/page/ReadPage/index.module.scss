@@ -1,0 +1,130 @@
+.container {
+  padding: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+  background-color: #0d1117;
+  color: #c9d1d9;
+  font-family: 'Inter', 'SF Pro Text', sans-serif;
+}
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.mainContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.paragraphCard {
+  background: #161b22;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px #30363d;
+  padding: 24px;
+  margin-bottom: 32px;
+  color: #c9d1d9;
+}
+
+.sentenceCard {
+  background: #161b22;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px #30363d;
+  margin-bottom: 24px;
+  transition: border 0.3s ease;
+
+  &.active {
+    border: 1px solid #58a6ff;
+  }
+}
+
+.chunkCard {
+  background-color: #0e1116 !important;
+  border: 1px solid #30363d !important;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  color: #c9d1d9;
+
+  &:hover {
+    border-color: #58a6ff !important;
+    background-color: #161b22 !important;
+    box-shadow: 0 0 0 1px #1f6feb66;
+  }
+
+  &.active {
+    background-color: #1c2b41 !important;
+    border-color: #58a6ff !important;
+  }
+}
+
+.chunkHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.word {
+  background-color: #21262d;
+  color: #c9d1d9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.sentenceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sideMap {
+  position: fixed;
+  top: 120px;
+  right: 24px;
+  width: 240px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 99;
+}
+
+.mapParagraph {
+  font-weight: 600;
+  padding: 6px 12px;
+  background-color: #21262d;
+  border-radius: 6px;
+  color: #c9d1d9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #30363d;
+  }
+}
+
+.mapSentence {
+  padding: 6px 12px;
+  border-radius: 6px;
+  background-color: #161b22;
+  color: #8b949e;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+
+  &:hover {
+    background-color: #21262d;
+  }
+
+  &.active {
+    background-color: #1f6feb;
+    color: #ffffff;
+    font-weight: bold;
+  }
+}

@@ -114,7 +114,9 @@ const ArticlePage: React.FC = () => {
               >
                 <Button danger>删除</Button>
               </Popconfirm>
-              {/* <Button style={{ marginRight: '10px' }}>新增段落</Button> */}
+              <Link to={'/read'}>
+                <Button>阅读</Button>
+              </Link>
             </div>
           </Card>
         ))}

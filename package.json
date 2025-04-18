@@ -24,6 +24,7 @@
     "chart.js": "^4.4.8",
     "dayjs": "^1.11.13",
     "fireworks-js": "^2.10.8",
+    "framer-motion": "^12.7.4",
     "howler": "^2.2.4",
     "lucide-react": "^0.487.0",
     "nanoid": "^5.1.5",
