@@ -2,10 +2,9 @@
 import React from 'react';
 import styles from './TimeTracker.module.scss';
 import { IBaseComProps } from '@/utils/base';
+import { usePracticeTracker } from '@/hook/serviceCustomHook/usePracticeTracker';
 
-interface TimeTrackerProps extends IBaseComProps {
-  activeTime: number; // 秒数
-}
+interface TimeTrackerProps extends IBaseComProps {}
 
 const formatTime = (seconds: number): string => {
   const hrs = String(Math.floor(seconds / 3600)).padStart(2, '0');
@@ -14,7 +13,8 @@ const formatTime = (seconds: number): string => {
   return `${hrs}:${mins}:${secs}`;
 };
 
-const TimeTracker: React.FC<TimeTrackerProps> = ({ style, activeTime }) => {
+const TimeTracker: React.FC<TimeTrackerProps> = ({ style }) => {
+  const { activeTime } = usePracticeTracker({ page: 'particle' });
   return (
     <div className={styles.timeTracker} style={style}>
       <span className={styles.icon}>⏱</span>

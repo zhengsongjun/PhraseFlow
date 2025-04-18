@@ -22,7 +22,7 @@ interface SentencePracticeProps {
 const isPrintableCharacter = (key: string) => {
   return key.length === 1 && !['Enter', 'Tab', ' '].includes(key);
 };
-const isWord = (token: string) => /^[a-zA-Z]+$/.test(token);
+const isWord = (token: string) => /^[a-zA-Z]+([-'’][a-zA-Z]+)*$/.test(token);
 
 const SentencePractice: React.FC<SentencePracticeProps> = ({
   sentence,
@@ -36,7 +36,7 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
   addErrorRecord,
   disabled,
 }) => {
-  const tokens = sentence.split(/(\s+|[.,!?])/).filter((token) => token !== '');
+  const tokens = sentence.match(/\w+[-'’]?\w+|\w+|[“”‘’"'.!?,;:\-]/g) || [];
   const wordIndices = tokens
     .map((token, idx) => (isWord(token) ? idx : -1))
     .filter((idx) => idx !== -1);
@@ -411,63 +411,69 @@ const SentencePractice: React.FC<SentencePracticeProps> = ({
         </div>
       ) : (
         <div className={styles.sentence} onClick={handleSentenceClick}>
-          {tokens.map((token, idx) =>
-            isWord(token) ? (
-              <div
-                key={idx}
-                className={`${styles.wordBlock} ${wrongIndices.includes(idx) ? styles.shake : ''}`}
-              >
-                {(() => {
-                  const baseCharWidth = 32;
-                  const sidePadding = 36;
-                  const word = inputs[idx] || '';
-                  const contentWidth =
-                    Math.max(word.length, token.length) * baseCharWidth;
-                  const totalWidth = contentWidth + sidePadding;
+          {tokens.map((token, idx) => {
+            if (isWord(token)) {
+              return (
+                <div
+                  key={idx}
+                  className={`${styles.wordBlock} ${wrongIndices.includes(idx) ? styles.shake : ''}`}
+                >
+                  {(() => {
+                    const baseCharWidth = 32;
+                    const sidePadding = 36;
+                    const word = inputs[idx] || '';
+                    const contentWidth =
+                      Math.max(word.length, token.length) * baseCharWidth;
+                    const totalWidth = contentWidth + sidePadding;
 
-                  return (
-                    <>
-                      <input
-                        ref={(el) => (inputRefs.current[idx] = el)}
-                        type='text'
-                        value={inputs[idx] ?? ''}
-                        onChange={(e) => handleInputChange(idx, e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(e, idx)}
-                        onFocus={() => {
-                          handleFocus(idx);
-                          setFocusedIndex(idx);
-                        }}
-                        onBlur={() => {
-                          setFocusedIndex(null);
-                        }}
-                        onMouseDown={handleMouseDown}
-                        className={[
-                          styles.input,
-                          styles[isInputActive(idx)],
-                        ].join(' ')}
-                        style={{ width: `${totalWidth}px` }}
-                      />
-                      <div
-                        className={[
-                          styles.underline,
-                          wrongIndices.includes(idx)
-                            ? styles.wrong
-                            : focusedIndex === idx
-                              ? styles.active
-                              : styles.inactive,
-                        ].join(' ')}
-                        style={{ width: `${totalWidth}px` }}
-                      />
-                    </>
-                  );
-                })()}
-              </div>
-            ) : (
-              <span key={idx} className={styles.punctuation}>
-                {token}
-              </span>
-            )
-          )}
+                    return (
+                      <>
+                        <input
+                          ref={(el) => (inputRefs.current[idx] = el)}
+                          type='text'
+                          value={inputs[idx] ?? ''}
+                          onChange={(e) =>
+                            handleInputChange(idx, e.target.value)
+                          }
+                          onKeyDown={(e) => handleKeyDown(e, idx)}
+                          onFocus={() => {
+                            handleFocus(idx);
+                            setFocusedIndex(idx);
+                          }}
+                          onBlur={() => {
+                            setFocusedIndex(null);
+                          }}
+                          onMouseDown={handleMouseDown}
+                          className={[
+                            styles.input,
+                            styles[isInputActive(idx)],
+                          ].join(' ')}
+                          style={{ width: `${totalWidth}px` }}
+                        />
+                        <div
+                          className={[
+                            styles.underline,
+                            wrongIndices.includes(idx)
+                              ? styles.wrong
+                              : focusedIndex === idx
+                                ? styles.active
+                                : styles.inactive,
+                          ].join(' ')}
+                          style={{ width: `${totalWidth}px` }}
+                        />
+                      </>
+                    );
+                  })()}
+                </div>
+              );
+            } else {
+              return (
+                <span key={idx} className={styles.punctuation}>
+                  {token}
+                </span>
+              );
+            }
+          })}
         </div>
       )}
       <ShortcutFooter

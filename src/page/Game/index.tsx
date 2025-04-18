@@ -11,7 +11,7 @@ import { updatePracticeStatistic } from '@/services/practiceStatistic';
 import vMp3 from '@/assets/v.mp3';
 const Game = () => {
   const { id, type: jsonType } = useParams<{ id: string; type: string }>();
-  const { activeTime } = usePracticeTracker({ page: 'particle' });
+
   const type = JSON.parse(jsonType as string);
   const { paragraphList } = useToArticleIdGetChunk(id as string, type);
   const [currentParagraph, setCurrentParagraph] = useState(0);
@@ -48,10 +48,9 @@ const Game = () => {
       return updated;
     });
   }, [currentChunkIndex, currentParagraph]);
-
   return (
     <>
-      <TimeTracker style={{ margin: 20 }} activeTime={activeTime} />
+      <TimeTracker style={{ margin: 20 }} />
       <CardSet
         data={paragraphList.map((item, index) => {
           return {
@@ -116,10 +115,14 @@ const Game = () => {
       {showFireworks ? <FireworksContainer /> : <></>}
       <CongratsModal
         visible={showFireworks}
-        onAgainButtonClick={() => {
+        onEscPress={() => {
           setShowFireworks(false);
           setCurrentChunkIndex(0);
           setCurrentParagraph(0);
+          setProcessList(paragraphList.map((_) => 0));
+        }}
+        onAgainButtonClick={() => {
+          console.log('1');
         }}
       />
     </>
